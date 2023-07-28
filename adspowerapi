@@ -1,0 +1,45 @@
+import requests
+
+def open_browser():
+    api_url = "http://local.adspower.net:50325/api/v1/browser/start"
+
+    # Replace these values with your actual user_id and other parameters if needed
+    user_id = "h1yynkm"
+    open_tabs = 0
+    ip_tab = 1
+    headless = 0
+    disable_password_filling = 0
+    clear_cache_after_closing = 0
+    enable_password_saving = 0
+
+    # Request parameters as a dictionary
+    params = {
+        "user_id": user_id,
+        "open_tabs": open_tabs,
+        "ip_tab": ip_tab,
+        "disable_password_filling": disable_password_filling,
+        "clear_cache_after_closing": clear_cache_after_closing,
+        "enable_password_saving": enable_password_saving
+    }
+
+    try:
+        response = requests.get(api_url, params=params)
+        data = response.json()
+
+        if response.status_code == 200 and data.get("code") == 0:
+            # Extract the relevant data from the response
+            selenium_debug_interface = data["data"]["ws"]["selenium"]
+            webdriver_path = data["data"]["webdriver"]
+
+            # Use the data as needed (e.g., to work with Selenium)
+            print("Selenium Debug Interface:", selenium_debug_interface)
+            print("Webdriver Path:", webdriver_path)
+
+        else:
+            print("Failed to open the browser. API response:", data)
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred while making the API request:", e)
+
+if __name__ == "__main__":
+    open_browser()
