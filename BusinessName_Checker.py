@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium_stealth import stealth
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 
 def simulate_typing(driver, element, text):
     for char in text:
@@ -27,6 +28,19 @@ def solve_captcha(driver):
         time.sleep(random.uniform(0.5, 1))
         return True
     return False
+
+def check_business_name_availability(driver):
+    try:
+        # Wait for the element to load on the page
+        time.sleep(3)
+        # Check if the element is present on the page
+        driver.find_element(By.XPATH, '/html/body/div[4]/form/div/section/div/div/div/section/div/div[2]/ul/li')
+        print("Business Name available")
+    except NoSuchElementException:
+        print("Business Name Not Available")
+
+def custom_wait(driver, timeout, method, locator):
+    return WebDriverWait(driver, timeout).until(method(locator))
 
 def run():
     user_data_dir = "/var/folders/7h/mfz36wt95qs6cgvsgn14k7tw0000gn/T/tmp0x0ug69f"  # Replace with your desired path
@@ -63,7 +77,7 @@ def run():
         driver.get("https://apps.ilsos.gov/businessentitysearch/")
 
         # Wait for the page to load
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="name"]')))
+        custom_wait(driver, 20, EC.presence_of_element_located, (By.XPATH, '//*[@id="name"]'))
 
         # Click the "Name" checkbox
         name_checkbox = driver.find_element(By.XPATH, '//*[@id="name"]')
@@ -71,10 +85,10 @@ def run():
 
         # Fill the search input with "jarul jfm llc"
         search_input = driver.find_element(By.ID, "searchValue")
-        simulate_typing(driver, search_input, "romey time llcc")
+        simulate_typing(driver, search_input, "jarul jfm llc")
 
         # Wait for the page to load after filling the input
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input')))
+        custom_wait(driver, 10, EC.presence_of_element_located, (By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input'))
 
         # Emulate a human-like typing speed
         time.sleep(random.uniform(0.5, 1.5))
@@ -83,8 +97,6 @@ def run():
         submit_button = driver.find_element(By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input')
         submit_button.click()
 
-        # Wait for the results to appear on the next page
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "results")))
 
         # Check for captcha and solve it
         captcha_solved = solve_captcha(driver)
@@ -102,18 +114,13 @@ def run():
         driver.execute_script("window.scrollTo(0, 0);")
         time.sleep(random.uniform(1, 2))
 
-        # Now you can interact with elements on the results page
-        # For example, you can find elements and retrieve their content
-        results = driver.find_elements(By.CSS_SELECTOR, ".searchResults")
-        for result in results:
-            print(result.text)
-
-        # You can also interact with other elements on the page as needed
-        # ...
+        
+        # Check for business name availability
+        check_business_name_availability(driver)
 
         # Simulate navigating back
         driver.back()
-        time.sleep(random.uniform(1, 2))
+        
 
     finally:
         # Close the browser when done
