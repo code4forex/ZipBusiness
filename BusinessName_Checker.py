@@ -71,7 +71,7 @@ def run():
 
         # Fill the search input with "jarul jfm llc"
         search_input = driver.find_element(By.ID, "searchValue")
-        simulate_typing(driver, search_input, "jarul jfm llc")
+        simulate_typing(driver, search_input, "romey time llc")
 
         # Wait for the page to load after filling the input
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input')))
