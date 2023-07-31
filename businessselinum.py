@@ -1,9 +1,16 @@
 import random
 import time
-from selenium import webdriver
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium_stealth import stealth
+from selenium.webdriver.common.action_chains import ActionChains
+
+def simulate_typing(driver, element, text):
+    for char in text:
+        ActionChains(driver).send_keys_to_element(element, char).perform()
+        time.sleep(random.uniform(0.1, 0.2))
 
 def run():
     user_data_dir = "/var/folders/7h/mfz36wt95qs6cgvsgn14k7tw0000gn/T/tmp0x0ug69f"  # Replace with your desired path
@@ -14,18 +21,29 @@ def run():
         # Add more user agents if desired
     ]
 
-    chrome_options = webdriver.ChromeOptions()
+    # Use the undetected_chromedriver to set up the Chrome options
+    options = uc.ChromeOptions()
 
     # Randomly select a user agent string
-    chrome_options.add_argument(f"--user-agent={random.choice(user_agents)}")
+    options.add_argument(f"--user-agent={random.choice(user_agents)}")
 
     # Use the desired user data directory
-    chrome_options.add_argument(f"--user-data-dir={user_data_dir}")
+    options.add_argument(f"--user-data-dir={user_data_dir}")
 
-    # Launch Chrome with the custom options
-    driver = webdriver.Chrome(options=chrome_options)
+    # Set up the undetected_chromedriver instance
+    driver = uc.Chrome(options=options)
 
     try:
+        # Use the selenium-stealth library to add stealth to the driver
+        stealth(driver,
+                languages=["en-US", "en"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True
+                )
+
         driver.get("https://apps.ilsos.gov/businessentitysearch/")
 
         # Wait for the page to load
@@ -37,9 +55,7 @@ def run():
 
         # Fill the search input with "brainfuseaii"
         search_input = driver.find_element(By.ID, "searchValue")
-        search_input.click()
-        search_input.clear()
-        search_input.send_keys("brainfuseaii")
+        simulate_typing(driver, search_input, "brainfuseaii")
 
         # Wait for the page to load after filling the input
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input')))
@@ -81,3 +97,4 @@ def run():
 
 if __name__ == "__main__":
     run()
+    

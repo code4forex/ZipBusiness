@@ -38,7 +38,7 @@ def run(playwright: sync_playwright) -> None:
     context.check('label:has-text("Name")')
     context.click("#searchValue")
     context.wait_for_load_state("networkidle")
-    context.fill("#searchValue", "brainfuseaii")
+    context.fill("#searchValue", "natalieotf")
     time.sleep(2)
 
     # Use JavaScript to click the button
