@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>LLC Business Form</title>
-    <link rel="stylesheet" href="/static/styles.css" />
+    <title>Check Business Name</title>
   </head>
   <body>
-    <div class="container">
-      <h1>ZipBusiness - Welcome to the LLC Business Form</h1>
-      <form action="/checkbusiness" method="POST">
-        <label for="business_name">Input Domain Name Here:</label>
-        <input type="text" id="business_name" name="business_name" required />
-        <button type="submit">Submit</button>
-      </form>
-      <div id="result">
-        <!-- This is where the result of the business name availability check will be displayed -->
-      </div>
-    </div>
+    <h1>Check Business Name Availability</h1>
+    <form id="businessForm" action="/checkbusiness" method="POST">
+      <label for="business_name">Enter Business Name:</label>
+      <input type="text" id="business_name" name="business_name" required />
+      <button type="submit">Check Availability</button>
+    </form>
+    <div id="loading" style="display: none">Loading...</div>
+    <div id="result" style="display: none"></div>
+
+    <script>
+      const form = document.getElementById("businessForm");
+      const loading = document.getElementById("loading");
+      const resultDiv = document.getElementById("result");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const url = event.target.getAttribute("action");
+        const method = event.target.getAttribute("method");
+
+        // Show loading message
+        loading.style.display = "block";
+        resultDiv.style.display = "none";
+
+        fetch(url, {
+          method: method,
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Hide loading message and show result
+            loading.style.display = "none";
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = JSON.stringify(data);
+          })
+          .catch((error) => {
+            // Handle error and show result
+            loading.style.display = "none";
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML =
+              "An error occurred while checking business name availability.";
+          });
+      });
+    </script>
   </body>
 </html>

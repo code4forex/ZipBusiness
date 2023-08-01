@@ -135,7 +135,7 @@ def checkbusiness():
             driver.get("https://apps.ilsos.gov/businessentitysearch/")
 
             # Wait for the page to load
-            custom_wait(driver, 20, EC.presence_of_element_located, (By.XPATH, '//*[@id="name"]'))
+            custom_wait(driver, 5, EC.presence_of_element_located, (By.XPATH, '//*[@id="name"]'))
 
             # Click the "Name" checkbox
             name_checkbox = driver.find_element(By.XPATH, '//*[@id="name"]')
@@ -150,7 +150,7 @@ def checkbusiness():
             custom_wait(driver, 10, EC.presence_of_element_located, (By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input'))
 
             # Emulate a human-like typing speed
-            time.sleep(random.uniform(0.5, 1.5))
+            time.sleep(random.uniform(1.4, 1.5))
 
             # Click the "Submit" button
             submit_button = driver.find_element(By.XPATH, '//*[@id="report-corp"]/div/div[3]/div/div/input')
@@ -166,11 +166,11 @@ def checkbusiness():
 
             # Scroll to simulate human interaction
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(random.uniform(1, 2))
+            #time.sleep(random.uniform(1, 2))
 
             # Scroll back up
             driver.execute_script("window.scrollTo(0, 0);")
-            time.sleep(random.uniform(1, 2))
+            #time.sleep(random.uniform(1, 2))
 
             # Check for business name availability
             availability_result = check_business_name_availability(driver)
