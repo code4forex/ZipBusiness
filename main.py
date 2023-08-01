@@ -11,10 +11,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium_stealth import stealth
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from supabase import create_client, Client
+load_dotenv()
+
 
 app = Flask(__name__)
 
-load_dotenv()
+## Amazon API Key logic
 
 api_key = os.getenv("api_key")
 api_secret = os.getenv("api_secret")
@@ -22,6 +25,29 @@ reg_headers = {
     "Authorization": f"sso-key {api_key}:{api_secret}",
     "accept": "application/json"
 }
+
+## Supabase API Key Logic
+
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
+
+
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
+
+## Google Sign-in logic
+
+def googlelogin():
+    
+data = supabase.auth.sign_in_with_oauth({
+  "provider": 'google,
+  "options": {
+    "redirect_to": 'https://example.com/welcome'
+  }
+})
+
 
 ## Domain Availability Logic
 
