@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LLC Business Form</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>ZipBusiness - Welcome to the LLC Business Form</h1>
+      <form action="/checkbusiness" method="POST">
+        <label for="business_name">Input Domain Name Here:</label>
+        <input type="text" id="business_name" name="business_name" required />
+        <button type="submit">Submit</button>
+      </form>
+      <div id="result">
+        <!-- This is where the result of the business name availability check will be displayed -->
+      </div>
+    </div>
+  </body>
+</html>
