@@ -39,14 +39,6 @@ supabase: Client = create_client(url, key)
 
 ## Google Sign-in logic
 
-def googlelogin():
-    
-data = supabase.auth.sign_in_with_oauth({
-  "provider": 'google,
-  "options": {
-    "redirect_to": 'https://example.com/welcome'
-  }
-})
 
 
 ## Domain Availability Logic
